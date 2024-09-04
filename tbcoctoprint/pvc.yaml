@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: octoprint
+  labels:
+    app.kubernetes.io/name: octoprint
+    app.kubernetes.io/instance: octoprint
+    app.kubernetes.io/component: octoprint
+    app.kubernetes.io/part-of: octoprint
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Gi

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: octoprint
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: octoprint
+  template:    
+    metadata:
+      labels:
+        app: octoprint
+    spec:
+      containers:
+        - name: octoprint
+          image: octoprint/octoprint:latest
+          ports:
+          - containerPort: 80
+            name: web
+            protocol: TCP
+          env:
+          - name: ENABLE_MJPG_STREAMER
+            value: 'true'
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /octoprint
+              name: octoprint
+              readOnly: false
+            - mountPath: /dev/ttyUSB0
+              name: ttyusb0
+              readOnly: false
+            - mountPath: /dev/video1
+              name: video1
+              readOnly: false
+      volumes:
+      - name: octoprint
+        persistentVolumeClaim:
+          claimName: octoprint
+      - name: ttyusb0
+        hostPath:
+          path: /dev/ttyUSB0
+      - name: video1
+        hostPath:
+          path: /dev/video1
